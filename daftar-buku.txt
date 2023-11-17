@@ -1,0 +1,8 @@
+Algoritma dan Pemrograman;Rinaldi Munir;Informatika;5;50000
+Atomic Habits;James Clear;Penguin Random House LLC;3;65000
+Bumi;Tere Liye;Gramedia Pustaka Utama;2;45000
+Kumpulan dan Solusi Pemrograman Python;Budi Raharjo;Informatika;1;45000
+Sang Pemimpi;Andrea Hirata;Bentang Pusaka;7;40000
+Laskar Pelangi;Andrea Hirata;Bentang Pusaka;4;40000
+Negeri 5 Menara;Ahmad Fuadi;Gramedia Pustaka Utama;6;50000
+Ayat-Ayat Cinta;Habiburrahman El Shirazy;Republika Penerbit;3;55000
