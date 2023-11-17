@@ -20,6 +20,8 @@ Status pengembangan fitur:
 | :----- | :------: |
 | Registrasi | Done |
 | Login | Done |
-| Pembelian Buku | On Progress |
-| Mencatat Transaksi | On Progress |
+| Pembelian Buku | Done |
+| Mencatat Transaksi | Done |
+| Menu | Done |
 
+Selanjutnya adalah melakukan pengembangan atau perbaikan jika ada.
