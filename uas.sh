@@ -9,8 +9,15 @@ function registrasi {
     read -r username
     echo -n "Masukkan password: "
     read -r password
-    echo "$username;$password" >> user.txt
-    echo "Registrasi berhasil"
+
+    if grep -q "$username;$password" user.txt; then
+        echo "Registrasi gagal\n"
+        registrasi
+        return
+    else
+        echo "$username;$password" >> user.txt
+        echo "Registrasi berhasil"
+    fi
 }
 
 # Fungsi untuk menampilkan menu login
@@ -21,23 +28,33 @@ function login {
     username=$username
     echo -n "Masukkan password: "
     read -r password
-    if grep -q "$username;$password" user.txt; then
+    if test ${#username} -eq 0 -a ${#password} -eq 0; then
+        echo "Login gagal"
+        login
+        return
+    elif grep -q "$username;$password" user.txt; then
         clear
         menu
     else
         echo "Login gagal"
+        login
+        return
     fi
 }
 
 # Fungsi untuk menampilkan menu beli
 function beli {
     repeat="y"
+    echo 
+    echo "Katalog Buku"
+    cat daftar-buku.txt
+    echo
+    echo "-------------------------------------"
     echo "Beli Buku"
     while [ $repeat == "y" ]; do
-    echo -n "Masukkan judul buku: "
-    read -r judul
-    if grep -q "$judul" daftar-buku.txt; then
-        grep "$judul" daftar-buku.txt
+    echo -n "Masukkan kata kunci: "
+    read -r keyword
+    if cat daftar-buku.txt | cut -d";" -f1 | grep "$keyword"; then
         echo "-------------------------------------"
         echo -n "Masukkan nama buku: "
         read -r judul_beli
@@ -50,8 +67,11 @@ function beli {
             harga=$(echo "$info_buku" | cut -d";" -f5)
             keranjang+=("$username;$judul_beli;$jumlah;$harga")
             echo "Buku berhasil dimasukkan ke keranjang"
+
             stok_sekarang=$(( $(echo "$info_buku" | cut -d";" -f4) - "$jumlah" ))
+
             new_info_buku=$(echo "$info_buku" | sed "s/;\([0-9]\+\);/;$stok_sekarang;/")
+
             sed "s/$info_buku/$new_info_buku/" daftar-buku.txt >> new_daftar-buku.txt
             rm daftar-buku.txt && mv new_daftar-buku.txt daftar-buku.txt
         fi
@@ -68,14 +88,15 @@ function beli {
 # Fungsi untuk menampilkan menu keranjang
 function keranjang {
     echo "Keranjang"
-    echo "Judul Buku | Jumlah Buku | Harga Buku"
-    echo "-------------------------------------"
+    echo "Judul Buku | Jumlah Buku | Harga Buku | Total Harga"
+    echo "--------------------------------------------------"
 
     for i in "${keranjang[@]}"; do
         judul_buku=$(echo "$i" | cut -d";" -f2)
         jumlah_buku=$(echo "$i" | cut -d";" -f3)
         harga_buku=$(echo "$i" | cut -d";" -f4)
-        echo "$judul_buku | $jumlah_buku | $harga_buku"
+        total_harga=$(( "$jumlah_buku" * "$harga_buku" ))
+        echo "$judul_buku | $jumlah_buku | $harga_buku | $total_harga"
     done
 }
 
@@ -87,6 +108,13 @@ function proses_transaksi {
     echo "Judul Buku | Jumlah Buku | Harga Buku | Total Harga"
     echo "--------------------------------------------------"
 
+    # Mengecek apakah keranjang kosong
+    if [ ${#keranjang[@]} -eq 0 ]; then
+        echo "Keranjang kosong!"
+        menu
+        return
+    fi
+
     for i in "${keranjang[@]}"; do
         judul_buku=$(echo "$i" | cut -d";" -f2)
         jumlah_buku=$(echo "$i" | cut -d";" -f3)
@@ -97,21 +125,22 @@ function proses_transaksi {
 
     total_semua=0
     for i in "${keranjang[@]}"; do
-        harga_buku=$(echo "$i" | cut -d";" -f3)
-        total_semua=$(( "$total_semua" + "$harga_buku" ))
+        jumlah_buku=$(echo "$i" | cut -d";" -f3)
+        harga_satuan=$(echo "$i" | cut -d";" -f4)
+        harga_buku=$(( jumlah_buku * harga_satuan ))
+        total_semua=$(( total_semua + harga_buku ))
     done
     echo "Total: $total_semua"
-
-    save_transaksi
 
     echo -n "Apakah Anda ingin memproses transaksi? (y/n): "
     read -r pilihan
     if [ "$pilihan" == "y" ]; then
         echo "Transaksi berhasil"
+        save_transaksi
         menu
     else
         echo "Transaksi dibatalkan"
-        main
+        menu
     fi
 }
 
@@ -119,6 +148,7 @@ function save_transaksi {
     for i in "${keranjang[@]}"; do
         echo "$i" >> transaksi.txt
     done
+    keranjang=()
 }
 
 function menu {
@@ -134,7 +164,7 @@ function menu {
         2) keranjang ; menu ;;
         3) proses_transaksi ;;
         0) main ;;
-        *) echo "Pilihan tidak tersedia" ; menu ;;
+        *) echo "Pilihan tidak tersedia" ; read ; clear ; menu ;;
     esac
 }
 
@@ -149,7 +179,7 @@ function main {
         1) registrasi ; main ;;
         2) login ;;
         0) exit ;;
-        *) echo "Pilihan tidak tersedia" ;;
+        *) echo "Pilihan tidak tersedia" ; read ;clear ; main ;;
     esac
 }
 
