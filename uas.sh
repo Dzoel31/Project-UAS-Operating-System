@@ -1,6 +1,7 @@
 #!/bin/bash
 
 function initBook {
+    rm daftar-buku.txt
     echo "Algoritma dan Pemrograman;Rinaldi Munir;Informatika;5;50000" >> daftar-buku.txt
     echo "Atomic Habits;James Clear;Penguin Random House LLC;3;65000" >> daftar-buku.txt
     echo "Bumi;Tere Liye;Gramedia Pustaka Utama;3;45000" >> daftar-buku.txt
