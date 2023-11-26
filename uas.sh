@@ -1,5 +1,16 @@
 #!/bin/bash
 
+function initBook {
+    echo "Algoritma dan Pemrograman;Rinaldi Munir;Informatika;5;50000" >> daftar-buku.txt
+    echo "Atomic Habits;James Clear;Penguin Random House LLC;3;65000" >> daftar-buku.txt
+    echo "Bumi;Tere Liye;Gramedia Pustaka Utama;3;45000" >> daftar-buku.txt
+    echo "Kumpulan dan Solusi Pemrograman Python;Budi Raharjo;Informatika;1;45000" >> daftar-buku.txt
+    echo "Sang Pemimpi;Andrea Hirata;Bentang Pusaka;5;40000" >> daftar-buku.txt
+    echo "Laskar Pelangi;Andrea Hirata;Bentang Pusaka;6;40000" >> daftar-buku.txt
+    echo "Negeri 5 Menara;Ahmad Fuadi;Gramedia Pustaka Utama;7;50000" >> daftar-buku.txt
+    echo "Ayat-Ayat Cinta;Habiburrahman El Shirazy;Republika Penerbit;3;55000" >> daftar-buku.txt
+}
+
 keranjang=()
 username=""
 # Fungsi untuk menampilkan menu registrasi akun
@@ -183,4 +194,5 @@ function main {
     esac
 }
 
+initBook
 main
