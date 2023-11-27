@@ -61,13 +61,13 @@ function beli {
     echo "Katalog Buku"
     cat daftar-buku.txt
     echo
-    echo "-------------------------------------"
+    echo "------------------------------------------------"
     echo "Beli Buku"
     while [ $repeat == "y" ]; do
     echo -n "Masukkan kata kunci: "
     read -r keyword
     if cat daftar-buku.txt | cut -d";" -f1 | grep "$keyword"; then
-        echo "-------------------------------------"
+        echo "------------------------------------------------"
         echo -n "Masukkan nama buku: "
         read -r judul_beli
         info_buku=$(grep "$judul_beli" daftar-buku.txt)
@@ -89,7 +89,7 @@ function beli {
         fi
         echo -n "Tambah buku lain ke dalam keranjang? (y/n): "
         read -r repeat
-        echo "-------------------------------------"
+        echo "------------------------------------------------"
     else
         echo "Buku tidak tersedia"
         break
@@ -101,7 +101,7 @@ function beli {
 function keranjang {
     echo "Keranjang"
     echo "Judul Buku | Jumlah Buku | Harga Buku | Total Harga"
-    echo "--------------------------------------------------"
+    echo "---------------------------------------------------"
 
     for i in "${keranjang[@]}"; do
         judul_buku=$(echo "$i" | cut -d";" -f2)
@@ -116,9 +116,9 @@ function keranjang {
 function proses_transaksi {
     echo "Transaksi Anda"
     echo "Atas nama: $username"
-    echo "-------------------------------------"
+    echo "---------------------------------------------------"
     echo "Judul Buku | Jumlah Buku | Harga Buku | Total Harga"
-    echo "--------------------------------------------------"
+    echo "---------------------------------------------------"
 
     # Mengecek apakah keranjang kosong
     if [ ${#keranjang[@]} -eq 0 ]; then
@@ -147,7 +147,7 @@ function proses_transaksi {
     echo -n "Apakah Anda ingin memproses transaksi? (y/n): "
     read -r pilihan
     if [ "$pilihan" == "y" ]; then
-        echo "Transaksi berhasil"
+        echo "Transaksi berhasil `date`"
         save_transaksi
         menu
     else
@@ -164,13 +164,16 @@ function save_transaksi {
 }
 
 function menu {
-    echo "Menu"
-    echo "1. Beli Buku"
-    echo "2. Keranjang"
-    echo "3. Proses Transaksi"
-    echo "0. Keluar"
+    echo "--------------------------"
+    echo "           MENU           "
+    echo "--------------------------"
+    echo "[1] Beli Buku"
+    echo "[2] Keranjang"
+    echo "[3] Proses Transaksi"
+    echo "[0] Keluar"
     echo -n "Masukkan pilihan: "
     read -r pilihan
+    echo "=========================="
     case $pilihan in
         1) beli ; menu ;;
         2) keranjang ; menu ;;
@@ -181,12 +184,16 @@ function menu {
 }
 
 function main {
-    echo "Selamat datang di Toko Buku"
-    echo "1. Registrasi"
-    echo "2. Login"
-    echo "0. Keluar"
+    echo "--------------------------------------------"
+    echo "      SELAMAT DATANG DI TOKO BUKU LIMA      "
+    echo "--------------------------------------------"
+    echo "[1] Registrasi"
+    echo "[2] Login"
+    echo "[0] Keluar"
+    echo "============================================"
     echo -n "Masukkan pilihan: "
     read -r pilihan
+    echo "============================================"
     case $pilihan in
         1) registrasi ; main ;;
         2) login ;;
